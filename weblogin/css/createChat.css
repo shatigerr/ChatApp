@@ -1,0 +1,21 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+ul div{
+    display: flex;
+    
+}
+
+li{
+    margin: 10px;
+}
