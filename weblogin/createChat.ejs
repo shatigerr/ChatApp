@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav>
-        <ul>
+        <ul class="nav-ul">
             <img src="./imatges/whatsapp.png" alt="">
             <div>
                 <li><a href="">General Chat</a></li>
@@ -18,8 +18,12 @@
         </ul>
     </nav>
 
-    <section>
-        
+    <section class="users-select">
+        <ul>
+            <% results.forEach(function(user){ %>
+            <li><%= user.username %></li>
+            <% }); %>
+        </ul>
     </section>
 </body>
 </html>

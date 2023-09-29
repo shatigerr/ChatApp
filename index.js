@@ -16,11 +16,11 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: 'IP',
-	port:'PORT',
-	user: 'USER',
-	password: 'PASSWD',
-	database: 'DATABASE'
+	host: '3.82.3.124',
+	port:'3306',
+	user: 'dam2',
+	password: 'dam2',
+	database: 'bdm9uf1'
 });
 // --------------------------------------------------------------------------------------------------------------------------
 //   establim la sessió que s'emmagatzema al costat del servidor incloses les cookies si en té
@@ -75,8 +75,9 @@ app.post('/entrar', function (req, res) {
 app.get('/home', function (req, res) {
 	if (req.session.loginOK) {
 		var xsql = 'SELECT * FROM tbusuaris WHERE username != ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
-	
+		
 		connexio.query(xsql, [req.session.username], function (err, results, fields){
+			console.log(results);
 			res.render(path.join(__dirname + '/weblogin/createChat.ejs'), { user: req.session.nomcomplet,results:results});
 		})
 		
