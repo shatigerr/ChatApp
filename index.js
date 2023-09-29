@@ -16,7 +16,7 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: '3.82.3.124',
+	host: '54.166.218.121',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -158,6 +158,11 @@ function getUsuaris(req,res) {
 		}
 	});
 }
+
+app.get("/chat/:id", (req, res) =>{
+	res.send("Hola")
+})
+
 // --------------------------------------------------------------------------------------------------------------------------
 //  activem el servidor
 // --------------------------------------------------------------------------------------------------------------------------
@@ -165,3 +170,4 @@ app.listen(NPORT, function () {
 	console.log('***Escoltant pel port ' + NPORT);
 });
 // --------------------------------------------------------------------------------------------------------------------------
+

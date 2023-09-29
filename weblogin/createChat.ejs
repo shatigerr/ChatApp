@@ -21,7 +21,7 @@
     <section class="users-select">
         <ul>
             <% results.forEach(function(user){ %>
-            <li><%= user.username %></li>
+            <li><%= user.username %> <a href="/chat/<%= user.id %>"><button type="button">Click</button></a> </li>
             <% }); %>
         </ul>
     </section>
