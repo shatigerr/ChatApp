@@ -16,7 +16,7 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: '54.166.218.121',
+	host: '3.82.7.63',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -55,7 +55,8 @@ app.post('/entrar', function (req, res) {
 			//if (err) { console.log(err); }
 			if ((results) && (results.length > 0)) {
 				req.session.loginOK = true;						// creem una variable de sessió per indicar que el login ha estat correcte
-				req.session.username = username;				// guardem el nom d'usuari en variables de sessió
+				req.session.username = username;
+				req.session.userId = results[0].id;				// guardem el nom d'usuari en variables de sessió
 				req.session.nomcomplet = results[0].nomcomplet;	// guardem el nom complet que hem obtingut del SELECT
 				req.session.email = results[0].email;			// guardem l'email que hem obtingut del SELECT
 				res.redirect('/home');
@@ -160,7 +161,20 @@ function getUsuaris(req,res) {
 }
 
 app.get("/chat/:id", (req, res) =>{
-	res.send("Hola")
+	const xsql = 'SELECT * FROM tbmensajes WHERE emisorId = ? OR receptor = ? AND emisorId = ? OR receptor = ? ';
+
+	connexio.query(xsql,[req.session.userId,req.session.userId,req.params.id,req.params.id],(err,results,fields) => {
+		console.log(results);
+		res.render(path.join(__dirname + '/weblogin/chatUser.ejs'),{receptor:req.params.id,results:results})
+	})
+	
+})
+
+app.post("/chat/:id",(req,res) => {
+	const xsql = 'INSERT INTO tbmensajes (id,emisorId,receptor,mensaje,fecha) VALUES(null,?,?,?,NOW())';
+	connexio.query(xsql,[req.session.userId,req.params.id,req.body.msg],(err,results,fields) =>{
+		res.redirect("/chat/"+req.params.id)
+	})
 })
 
 // --------------------------------------------------------------------------------------------------------------------------
