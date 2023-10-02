@@ -1,25 +1,136 @@
-body{
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
     margin: 0;
     padding: 0;
 }
 
-.nav-ul {
-    display: flex;
-    justify-content: space-between;
+nav {
+    background-color: rgb(32, 44, 51);
+    width: 70vh;
 }
 
-ul div{
-    display: flex;
-    
+nav li {
+    display: inline;
+    text-align: center;
 }
 
-li{
+
+nav a {
+    color: rgb(124, 131, 141);
+    text-decoration: none;
+    margin-top: 1em;
+    display: inline-block;
+    padding: .5em;
+    margin-left: -.5em;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+
+    &:before,
+    &:after {
+        position: absolute;
+        content: '';
+        border-bottom: 3px solid rgb(124, 131, 141);
+        border-radius: 1em;
+        bottom: .3em;
+        transition: transform .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    &:before {
+        width: 1em;
+        transform-origin: left;
+    }
+
+    &:after {
+        width: 82%;
+        left: 1em;
+        transform: translateX(110%);
+    }
+
+    &:hover:before {
+        transform: scaleX(0.3);
+    }
+
+    &:hover:after {
+        transform: translateX(0);
+    }
+
+}
+
+#img-profile {
+    background-color: black;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     margin: 10px;
 }
 
-.users-select{
-    background-color: black;
+ul div {
+    display: flex;
+}
+
+li {
+    margin: 10px;
+}
+
+.users-select {
+    background-color: rgb(32, 44, 51);
     height: 100vh;
-    width: 30%;
+    width: 70vh;
     color: white;
+}
+
+.users-select li {
+    margin: 0;
+    background-color: rgb(17, 27, 33);
+    list-style: none;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+button {
+    background-color: #FFFFFF;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 0;
+    outline: none;
+    padding: 10px 10px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+button:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow .2s;
+}
+
+button:active {
+    background-color: #F7F7F7;
+    border-color: #000000;
+    transform: scale(.96);
+}
+
+button:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
 }
