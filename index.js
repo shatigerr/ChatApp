@@ -16,7 +16,7 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: '3.82.7.63',
+	host: '54.91.123.180',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -163,17 +163,18 @@ function getUsuaris(req,res) {
 app.get("/chat/:id", (req, res) =>{
 	const xsql = 'SELECT * FROM tbmensajes WHERE emisorId = ? OR receptor = ? AND emisorId = ? OR receptor = ? ';
 
-	connexio.query(xsql,[req.session.userId,req.session.userId,req.params.id,req.params.id],(err,results,fields) => {
+	connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
 		console.log(results);
-		res.render(path.join(__dirname + '/weblogin/chatUser.ejs'),{receptor:req.params.id,results:results})
+		res.render(path.join(__dirname + '/weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId})
 	})
 	
 })
 
-app.post("/chat/:id",(req,res) => {
+app.post("/chat/:id",(req, res) => {
 	const xsql = 'INSERT INTO tbmensajes (id,emisorId,receptor,mensaje,fecha) VALUES(null,?,?,?,NOW())';
-	connexio.query(xsql,[req.session.userId,req.params.id,req.body.msg],(err,results,fields) =>{
-		res.redirect("/chat/"+req.params.id)
+	connexio.query(xsql,[req.session.userId, req.params.id, req.body.msg], (err,results,fields) =>{
+		console.log(results)
+		res.redirect("/chat/" + req.params.id)
 	})
 })
 

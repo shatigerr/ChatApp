@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Chat</title>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> -->
+    <!-- <link src="/css/a.css" rel="stylesheet" type="stylesheet"> -->
+    <link rel="stylesheet" href="./css/chatUser.css" type="text/css">
+
 </head>
+
 <body>
-    
     <div class="messages">
-        <% results.forEach(function(msg){ %>
-            <p><%= msg.mensaje %></p>
-        <% }); %>
+        <% results.forEach(function (msg) { %>
+            <% if (msg.emisorId==id) { %>
+                <div id="emisor-div">
+                    <p id="emisor" class="msg">
+                        <%= msg.mensaje %>
+                    </p>
+                </div>
+                <% } else { %>
+                    <div id="receptor-div">
+                        <p id="receptor" class="msg">
+                            <%= msg.mensaje %>
+                        </p>
+                    </div>
+                    <% } %>
+                        <% }); %>
     </div>
-    
-    <form action="/chat/<%= receptor %>" method="post">
-        <input type="text" name="msg">
-        <button type="submit">Send</button>
-    </form>
+
+    <footer>
+        <form action="/chat/<%= receptor %>" method="post">
+            <input type="text" name="msg" placeholder="Mensaje">
+            <button type="submit" id="sendButton">.</button>
+        </form>
+    </footer>
+    <script>
+
+        function scrollDown() {
+            window.scrollTo(0, document.body.scrollHeight);
+            behavior: "smooth";
+        }
+
+        window.onload = scrollDown;
+    </script>
 </body>
 </html>
