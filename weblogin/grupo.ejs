@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Chat</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/chatUser.css" type="text/css">
+    <script src="./js/chatUser.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div id="img-chat">
+           <div id="img-profile"></div>
+        </div>
+
+        <div>
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/phone.png" alt="phone"/>
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/video-message.png" alt="video-message"/>
+        </div>
+    </header>
+
+    <div class="messages">
+        <% results.forEach(function (msg) { %>
+            <% if (msg.emisorId==id) { %>
+                <div id="emisor-div">
+                    <p id="emisor" class="msg">
+                        <%= msg.mensaje %>
+                    </p>
+                </div>
+                <% } else { %>
+                    <div id="receptor-div">
+                        <p id="receptor" class="msg">
+                            <%= msg.mensaje %>
+                        </p>
+                    </div>
+                    <% } %>
+                        <% }); %>
+    </div>
+
+    <footer>
+        <form action="/grupo/<%= codgrupo %>" method="post" class="formText">
+            <input type="text" name="msg" placeholder="Mensaje" id="inputText" />
+            <button type="submit" id="sendButton">.</button>
+        </form>
+    </footer>
+
+    <div id="toast">
+        <div>
+            <h2><img width="30" height="30" src="https://img.icons8.com/fluency/48/general-warning-sign.png"
+                    alt="general-warning-sign" />Alert!</h2>
+        </div>
+        <p>No puedes enviar un mensaje vacio</p>
+    </div>
+
+    <script>
+        function scrollDown() {
+        window.scrollTo(0, document.body.scrollHeight);
+        behavior: "smooth";
+    }
+
+    window.onload = scrollDown;
+    </script>
+</body>
+</html>

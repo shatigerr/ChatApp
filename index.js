@@ -160,6 +160,7 @@ function getUsuaris(req,res) {
 	});
 }
 
+// Chats
 app.get("/chat/:id", (req, res) =>{
 	const xsql = 'SELECT * FROM tbmensajes WHERE emisorId = ? OR receptor = ? AND emisorId = ? OR receptor = ? ';
 
@@ -177,6 +178,43 @@ app.post("/chat/:id",(req, res) => {
 		res.redirect("/chat/" + req.params.id)
 	})
 })
+
+// Grupos
+app.get("/grupo/:cod", (req, res) =>{
+	const xsql = 'SELECT * FROM tbmensajes WHERE codgrupo = ? AND codgrupo IS NOT NULL'
+
+	connexio.query(xsql,[req.params.cod], (err, results, fields)=>{
+		console.log(results);
+		res.render(path.join(__dirname + '/weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId})
+	})
+})
+
+app.post("/grupo/:cod", (req, res)=>{
+	const xsql = 'INSERT INTO tbmensajes (id, emisorId, receptor, mensaje, fecha, codgrupo) VALUES(null,?, null, ?, NOW(), ?)'
+
+	connexio.query(xsql, [req.session.userId, req.body.msg, req.params.cod], (err, results, fields) =>{
+		console.log(results)
+		res.redirect("/grupo/" + req.params.cod)
+	})	
+})
+
+// app.post("/grupo/:cod", (req, res) => {
+// 	const xsql = 'INSERT INTO tbmensajes (id, emisorId, receptor, mensaje, fecha, codgrupo) VALUES (null, ?, null, ?, NOW(), ?)';
+  
+// 	const values = [req.session.id, req.body.msg, req.params.cod];
+  
+// 	connexio.query(xsql, values, (err, results, fields) => {
+// 	  if (err) {
+// 		console.error(err);
+// 		// Manejo de errores aquí, por ejemplo, enviar una respuesta de error al cliente.
+// 		res.status(500).send("Error interno del servidor");
+// 	  } else {
+// 		console.log(results);
+// 		res.redirect("/grupo/" + req.params.cod);
+// 	  }
+// 	});
+//   });
+  
 
 // --------------------------------------------------------------------------------------------------------------------------
 //  activem el servidor
