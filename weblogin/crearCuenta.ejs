@@ -3,18 +3,30 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Login Page with Username and Password Example</title>
+  <title>Crear cuenta</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
   <link rel="stylesheet" href="./css/index.css">
 
 </head>
 
 <body>
+  <!-- partial:index.partial.html -->
+
   <body class="align">
+
     <div class="grid">
-      <!-- Inicio Form -->
-      <form method="post" action="entrar" class="form login">
-        <!-- Username -->
+
+      <form method="post" action="/crearCuenta" class="form login">
+        <!-- Nombre completo -->
+        <div class="form__field">
+          <label for="login__username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="#606468" fill="currentColor" class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5ZM9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8Zm1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5Zm-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96c.026-.163.04-.33.04-.5ZM7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
+          </svg>
+            <span class="hidden">Nombre completo</span></label>
+          <input id="login__username" type="text" name="completedUsername" class="form__input" placeholder="Nombre completo" required>
+        </div>
+
+        <!-- User -->
         <div class="form__field">
           <label for="login__username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="#606468"
               fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -22,6 +34,17 @@
             </svg>
             <span class="hidden">Usuario</span></label>
           <input id="login__username" type="text" name="username" class="form__input" placeholder="Usuario" required>
+        </div>
+        <!-- Mail -->
+        <div class="form__field">
+          <label for="login__email"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="#606468"
+              fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+              <path
+                d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
+            </svg>
+            <span class="hidden">Correo electronico</span></label>
+          <input id="login__email" type="text" name="mail" class="form__input" placeholder="Correo electronico"
+            required>
         </div>
         <!-- Password -->
         <div class="form__field">
@@ -37,14 +60,14 @@
           <input id="login__password" type="password" name="password" class="form__input" placeholder="Contraseña"
             required>
         </div>
-        <!-- Submit -->
+
         <div class="form__field">
           <input type="submit" value="Sign In">
         </div>
 
       </form>
 
-      <p class="text--center">No tienes miembro? <a href="/crearCuenta">Crear cuenta</a>
+      <p class="text--center">Ya eres miembro? <a href="/">Inicia sesion</a>
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons.svg#arrow-right"></use>
         </svg>

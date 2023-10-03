@@ -8,6 +8,16 @@
 // --------------------------------------------------------------------------------------------------------------------------
 //   declaracions globals
 // --------------------------------------------------------------------------------------------------------------------------
+
+// TODO
+// * Hablar con gente que esta conectada
+// * Crear grupos y unirse
+// * Encriptar contraseñas
+// * Refactorizar y asegurar
+// * Poner el usuario para ver quien manda el mensaje
+// * Que el chat sea vivo (web socket)
+// * Poner imagen de perfil
+
 const NPORT = 4444;
 var express = require('express');			// web framework per a NodeJS
 var session = require('express-session');	// permet la gestió de sessions amb express, també es pot fer servir cookie-sesion
@@ -16,7 +26,7 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: '3.93.192.186',
+	host: '52.70.67.53',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -162,19 +172,23 @@ function getUsuaris(req,res) {
 
 // Chats
 app.get("/chat/:id", (req, res) =>{
-	const xsql = 'SELECT * FROM tbmensajes WHERE emisorId = ? OR receptor = ? AND emisorId = ? OR receptor = ? ';
+	const xsql = 'SELECT * FROM tbmensajes WHERE (emisorId = ? OR receptor = ?) AND (emisorId = ? OR receptor = ?) ';
+	const saberNombre = 'SELECT username FROM tbusuaris WHERE id = ?'
 
 	connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
-		console.log(results);
-		res.render(path.join(__dirname + '/weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId})
-	})
 	
+		connexio.query(saberNombre,[req.params.id], (err, results2, fields)=>{
+			// console.log("------> " + results2[0].username)
+			//console.log(results);
+			res.render(path.join(__dirname + '/weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId, receptorName: results2[0].username})
+		})
+	})
 })
 
 app.post("/chat/:id",(req, res) => {
 	const xsql = 'INSERT INTO tbmensajes (id,emisorId,receptor,mensaje,fecha) VALUES(null,?,?,?,NOW())';
 	connexio.query(xsql,[req.session.userId, req.params.id, req.body.msg], (err,results,fields) =>{
-		console.log(results)
+		// console.log(results)
 		res.redirect("/chat/" + req.params.id)
 	})
 })
@@ -184,7 +198,7 @@ app.get("/grupo/:cod", (req, res) =>{
 	const xsql = 'SELECT * FROM tbmensajes WHERE codgrupo = ? AND codgrupo IS NOT NULL'
 
 	connexio.query(xsql,[req.params.cod], (err, results, fields)=>{
-		console.log(results);
+		//console.log(results);
 		res.render(path.join(__dirname + '/weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId})
 	})
 })
@@ -193,9 +207,28 @@ app.post("/grupo/:cod", (req, res)=>{
 	const xsql = 'INSERT INTO tbmensajes (id, emisorId, receptor, mensaje, fecha, codgrupo) VALUES(null,?, null, ?, NOW(), ?)'
 
 	connexio.query(xsql, [req.session.userId, req.body.msg, req.params.cod], (err, results, fields) =>{
-		console.log(results)
+		//console.log(results)
 		res.redirect("/grupo/" + req.params.cod)
 	})	
+})
+
+// Crear cuenta
+app.get("/crearCuenta", (req, res) =>{
+	res.render(path.join(__dirname + '/weblogin/crearCuenta.ejs'))
+})
+
+
+app.post("/crearCuenta", (req, res) =>{
+	const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado) VALUES(null, ?, ?, ? , ?, 0)"
+
+	// sesion se guarda en la sesion "cokie"
+	// params cuando le pasas un valor a la ruta
+	// body cuando del html o de algun lado le llega la request
+
+	connexio.query(xsql,[req.body.username, req.body.password, req.body.completedUsername, req.body.mail], (err, results, fields)=>{
+		// console.log(results)
+		res.redirect("/")
+	})
 })
 
 // app.post("/grupo/:cod", (req, res) => {
@@ -220,7 +253,7 @@ app.post("/grupo/:cod", (req, res)=>{
 //  activem el servidor
 // --------------------------------------------------------------------------------------------------------------------------
 app.listen(NPORT, function () {
-	console.log('***Escoltant pel port ' + NPORT);
+	// console.log('***Escoltant pel port ' + NPORT);
+	console.log("http://localhost:" + NPORT)
 });
 // --------------------------------------------------------------------------------------------------------------------------
-
