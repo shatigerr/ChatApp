@@ -7,13 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Chat</title>
-    <!-- <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> -->
-    <!-- <link src="/css/a.css" rel="stylesheet" type="stylesheet"> -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="./css/chatUser.css" type="text/css">
+    <script src="./js/chatUser.js"></script>
 
 </head>
 
 <body>
+    <header>
+        <div id="img-chat">
+           <div id="img-profile"></div>
+           <h3><%= id %></h3> 
+        </div>
+
+        <div>
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/phone.png" alt="phone"/>
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/video-message.png" alt="video-message"/>
+        </div>
+    </header>
+
     <div class="messages">
         <% results.forEach(function (msg) { %>
             <% if (msg.emisorId==id) { %>
@@ -33,19 +45,28 @@
     </div>
 
     <footer>
-        <form action="/chat/<%= receptor %>" method="post">
-            <input type="text" name="msg" placeholder="Mensaje">
+        <form action="/chat/<%= receptor %>" method="post" class="formText">
+            <input type="text" name="msg" placeholder="Mensaje" id="inputText" />
             <button type="submit" id="sendButton">.</button>
+            <p><%=  %></p>
         </form>
     </footer>
+
+    <div id="toast">
+        <div>
+            <h2><img width="30" height="30" src="https://img.icons8.com/fluency/48/general-warning-sign.png"
+                    alt="general-warning-sign" />Alert!</h2>
+        </div>
+        <p>No puedes enviar un mensaje vacio</p>
+    </div>
+
     <script>
-
         function scrollDown() {
-            window.scrollTo(0, document.body.scrollHeight);
-            behavior: "smooth";
-        }
+        window.scrollTo(0, document.body.scrollHeight);
+        behavior: "smooth";
+    }
 
-        window.onload = scrollDown;
+    window.onload = scrollDown;
     </script>
 </body>
 </html>
