@@ -10,12 +10,11 @@
 // --------------------------------------------------------------------------------------------------------------------------
 
 // TODO
-// * Hablar con gente que esta conectada
 // * Crear grupos y unirse
 // * Encriptar contraseñas
-// * Refactorizar y asegurar
 // * Poner el usuario para ver quien manda el mensaje
 // * Que el chat sea vivo (web socket)
+// * Refactorizar y asegurar
 // * Poner imagen de perfil
 
 const NPORT = 4444;
@@ -25,6 +24,7 @@ var bodyParser = require('body-parser');	// permet gestionar les peticions http 
 var path = require('path');					// permet treballar amb les rutes de fitxers i directoris
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
+const { log } = require('console');
 var connexio = mysql.createConnection({
 	host: '34.229.112.65',
 	port:'3306',
@@ -60,6 +60,7 @@ app.post('/entrar', function (req, res) {
 	var username = req.body.username;
 	var password = req.body.password;
 	var xsql = 'SELECT * FROM tbusuaris WHERE username = ? AND password = ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
+	let active = 'UPDATE tbusuaris SET conectado=1 WHERE id = ?  '
 	if (username && password) {
 		connexio.query(xsql, [username, password], function (err, results, fields) {
 			//if (err) { console.log(err); }
@@ -69,7 +70,10 @@ app.post('/entrar', function (req, res) {
 				req.session.userId = results[0].id;				// guardem el nom d'usuari en variables de sessió
 				req.session.nomcomplet = results[0].nomcomplet;	// guardem el nom complet que hem obtingut del SELECT
 				req.session.email = results[0].email;			// guardem l'email que hem obtingut del SELECT
-				res.redirect('/home');
+				connexio.query(active, [req.session.userId], function (err, results, fields){
+
+					res.redirect('/home');
+				})
 			} else {
 				req.session.loginOK = false;
 				res.redirect('/');				// redirigim a l'arrel del web en cas d'usuari no autoritzat
@@ -85,10 +89,11 @@ app.post('/entrar', function (req, res) {
 // --------------------------------------------------------------------------------------------------------------------------
 app.get('/home', function (req, res) {
 	if (req.session.loginOK) {
+		console.log(req.session);
 		var xsql = 'SELECT * FROM tbusuaris WHERE username != ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
 		
 		connexio.query(xsql, [req.session.username], function (err, results, fields){
-			console.log(results);
+			//console.log(results);
 			res.render(path.join(__dirname + '/weblogin/createChat.ejs'), { user: req.session.nomcomplet,results:results});
 		})
 		
@@ -228,6 +233,18 @@ app.post("/crearCuenta", (req, res) =>{
 	connexio.query(xsql,[req.body.username, req.body.password, req.body.completedUsername, req.body.mail], (err, results, fields)=>{
 		// console.log(results)
 		res.redirect("/")
+	})
+})
+
+
+// Logout
+
+app.post('/logout',(req,res) => {
+	let active = 'UPDATE tbusuaris SET conectado=0 WHERE id = ?  ';
+
+	connexio.query(active,[req.session.userId],(err,results) => {
+		req.session.loginOK = false;
+		res.redirect('/');
 	})
 })
 

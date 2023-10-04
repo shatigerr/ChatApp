@@ -12,7 +12,10 @@
             <div>
                 <li><div id="img-profile"></div></li>
                 <li><a href="/grupo/AAAAA">General Chat</a></li>
-                <li><a href="">Crear grupo</a></li>
+                <li><a href="#">Crear grupo</a></li>
+                <form action="/logout" method="post">
+                    <li><button type="submit">Cerrar session</button></li>
+                </form>
             </div>
         </ul>
     </nav>
@@ -20,7 +23,10 @@
     <section class="users-select">
         <ul>
             <% results.forEach(function(user){ %>
-            <li><%= user.username %> <a href="/chat/<%= user.id %>"><button type="button">Click</button></a> </li>
+            <% if(user.conectado == 1){ %>
+
+                <li><%= user.username %> <a href="/chat/<%= user.id %>"><button type="button">Click</button></a> </li>
+            <% } %>
             <% }); %>
         </ul>
     </section>
