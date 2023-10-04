@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a chat!!</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="./css/createChat.css">
 </head>
+
 <body>
-    <nav>
-        <ul>
-            <div>
-                <li><div id="img-profile"></div></li>
-                <li><a href="/grupo/AAAAA">General Chat</a></li>
-                <li><a href="#">Crear grupo</a></li>
-                <form action="/logout" method="post">
-                    <li><button type="submit">Cerrar session</button></li>
-                </form>
-            </div>
-        </ul>
-    </nav>
+    <div id="container">
+        <nav>
+            <ul>
+                <!-- <li>
+                    <div id="img-profile"></div>
+                </li> -->
+                <li><a href="/grupo/AAAAA"><img width="30" height="30" src="./imatges/icons8-grupo-50.png" alt="groups"/></a></li>
+                <li><a href="/crearGrupo"><img width="30" height="30" src="./imatges/icons8-crear-50.png" alt="crearGrupo"/></a></a></li>
+                <li>
+                    <form action="/logout" method="post">
+                        <button type="submit"><img width="30" height="30" src="./imatges/icons8-salida-50.png" alt="logout"/></a></button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
 
-    <section class="users-select">
-        <ul>
-            <% results.forEach(function(user){ %>
-            <% if(user.conectado == 1){ %>
+        <section class="users-select">
+            <ul>
+                <% results.forEach(function(user){ %>
+                    <% if(user.conectado==1){ %>
 
-                <li><%= user.username %> <a href="/chat/<%= user.id %>"><button type="button">Click</button></a> </li>
-            <% } %>
-            <% }); %>
-        </ul>
-    </section>
+                        <a href="/chat/<%= user.id %>">
+                            <li>
+                                <h4>
+                                    <%= user.username %>
+                                </h4>
+                            </li>
+                        </a>
+                        <% } %>
+                            <% }); %>
+            </ul>
+        </section>
+    </div>
+    <iframe src="http://localhost:4444/chat/1" frameborder="0"></iframe>
+
 </body>
+
 </html>

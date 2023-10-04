@@ -22,11 +22,12 @@ var express = require('express');			// web framework per a NodeJS
 var session = require('express-session');	// permet la gestió de sessions amb express, també es pot fer servir cookie-sesion
 var bodyParser = require('body-parser');	// permet gestionar les peticions http que arriben al servidor
 var path = require('path');					// permet treballar amb les rutes de fitxers i directoris
+var crypto = require('crypto');
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 const { log } = require('console');
 var connexio = mysql.createConnection({
-	host: '34.229.112.65',
+	host: '3.94.130.181',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -54,11 +55,21 @@ app.get('/', function (req, res) {
 // --------------------------------------------------------------------------------------------------------------------------
 //  gestionem les peticions a /entrar
 // --------------------------------------------------------------------------------------------------------------------------
+let hasdMD5;
+const algorisme = 'RSA-MD5';
 app.post('/entrar', function (req, res) {
-
 	// obtenim el valors dels camps que vénen del formulari HTML
 	var username = req.body.username;
 	var password = req.body.password;
+
+	// Enviamos la contraseña encriptada a hashMD5
+	hasdMD5 = crypto.createHash(algorisme).update(password).digest('hex');
+	// 4a7d1ed414474e4033ac29ccb8653d9b
+
+
+	password = hasdMD5;
+	
+	
 	var xsql = 'SELECT * FROM tbusuaris WHERE username = ? AND password = ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
 	let active = 'UPDATE tbusuaris SET conectado=1 WHERE id = ?  '
 	if (username && password) {
@@ -226,11 +237,17 @@ app.get("/crearCuenta", (req, res) =>{
 app.post("/crearCuenta", (req, res) =>{
 	const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado) VALUES(null, ?, ?, ? , ?, 0)"
 
+	password = req.body.password
+
+	hasdMD5 = crypto.createHash(algorisme).update(password).digest('hex');
+
+	password = hasdMD5;
+
 	// sesion se guarda en la sesion "cokie"
 	// params cuando le pasas un valor a la ruta
 	// body cuando del html o de algun lado le llega la request
 
-	connexio.query(xsql,[req.body.username, req.body.password, req.body.completedUsername, req.body.mail], (err, results, fields)=>{
+	connexio.query(xsql,[req.body.username, password, req.body.completedUsername, req.body.mail], (err, results, fields)=>{
 		// console.log(results)
 		res.redirect("/")
 	})
@@ -238,13 +255,29 @@ app.post("/crearCuenta", (req, res) =>{
 
 
 // Logout
-
 app.post('/logout',(req,res) => {
 	let active = 'UPDATE tbusuaris SET conectado=0 WHERE id = ?  ';
 
 	connexio.query(active,[req.session.userId],(err,results) => {
 		req.session.loginOK = false;
 		res.redirect('/');
+	})
+})
+
+
+// Crear grupo
+app.get("/crearGrupo", (req, res)=>{
+	res.render(path.join(__dirname + '/weblogin/crearGrupo.ejs'))
+})
+
+app.post("/anadirGrupo", (req, res) =>{
+	const xsql = 'INSERT INTO tbgrupo (cod, nombre) VALUES(?, ?)';
+
+	
+	connexio.query(xsql,[req.body.codGrupo, req.body.nombreGrupo], (err, reults, fields)=>{
+		console.log("Codigo introducido: " + req.body.codGrupo)
+		console.log("Nombre introducido: " + req.body.nombreGrupo)
+		res.redirect("/")
 	})
 })
 
