@@ -19,6 +19,10 @@
 
 const NPORT = 4444;
 var express = require('express');			// web framework per a NodeJS
+
+
+
+
 var session = require('express-session');	// permet la gestió de sessions amb express, també es pot fer servir cookie-sesion
 var bodyParser = require('body-parser');	// permet gestionar les peticions http que arriben al servidor
 var path = require('path');					// permet treballar amb les rutes de fitxers i directoris
@@ -37,6 +41,7 @@ var connexio = mysql.createConnection({
 //   establim la sessió que s'emmagatzema al costat del servidor incloses les cookies si en té
 // --------------------------------------------------------------------------------------------------------------------------
 var app = express();
+app.set('view engine', 'ejs');
 app.use(session({
 	secret: 'clausecreta',			// aquesta clau serveix per a signar les cookies (obligatori)	
 	resave: true,					// força que es torni a sobreescriure la sessió encara que pugui estar oberta (obligatori)
@@ -100,7 +105,7 @@ app.post('/entrar', function (req, res) {
 // --------------------------------------------------------------------------------------------------------------------------
 app.get('/home', function (req, res) {
 	if (req.session.loginOK) {
-		console.log(req.session);
+		//console.log(req.session);
 		var xsql = 'SELECT * FROM tbusuaris WHERE username != ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
 		
 		connexio.query(xsql, [req.session.username], function (err, results, fields){
@@ -275,8 +280,8 @@ app.post("/anadirGrupo", (req, res) =>{
 
 	
 	connexio.query(xsql,[req.body.codGrupo, req.body.nombreGrupo], (err, reults, fields)=>{
-		console.log("Codigo introducido: " + req.body.codGrupo)
-		console.log("Nombre introducido: " + req.body.nombreGrupo)
+		//console.log("Codigo introducido: " + req.body.codGrupo)
+		//console.log("Nombre introducido: " + req.body.nombreGrupo)
 		res.redirect("/")
 	})
 })
@@ -297,6 +302,10 @@ app.post("/anadirGrupo", (req, res) =>{
 // 	  }
 // 	});
 //   });
+  
+app.get('/chatWait', (req, res) => {
+	res.render(path.join(__dirname + '/weblogin/chatWait.ejs'))
+  });
   
 
 // --------------------------------------------------------------------------------------------------------------------------
