@@ -26,7 +26,7 @@ var path = require('path');					// permet treballar amb les rutes de fitxers i d
 
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 var connexio = mysql.createConnection({
-	host: '52.70.67.53',
+	host: '34.229.112.65',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',

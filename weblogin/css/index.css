@@ -203,3 +203,17 @@ p {
 .text--center {
   text-align: center;
 }
+
+/* .error-message {
+  color: red;
+  font-size: 12px;
+  display: none; 
+} */
+
+.error-message-username, .error-message-password {
+  color: red;
+  font-size: 12px;
+  display: none;
+  margin-top: 4px;
+  margin-left: 20px;
+}
