@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Listado grupos</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/listadoGrupos.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Montserrat;
+        }
+
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(44, 51, 56);
+
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 20vh;
+            margin-bottom: 10vh;
+
+        }
+
+        #grupo {
+            width: 30vw;
+            height: 30vh;
+            background-color: rgb(67, 74, 82);
+            border-radius: 5px;
+            margin: 10px;
+            color: white;
+        }
+
+
+        span {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        span h2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 20vh;
+            text-align: center;
+        }
+
+        button {
+            display: inline-block;
+            margin-bottom: 10vh;
+            outline: 0;
+            border: 0;
+            cursor: pointer;
+            background: #000000;
+            color: #FFFFFF;
+            border-radius: 8px;
+            padding: 14px 24px 16px;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1;
+            transition: background-color 0.5s ease-out;
+        }
+
+        button:hover {
+            background-color: rgb(145, 151, 155);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <% results.forEach(function (grupo) { %>
+            <!-- El grupo general no tiene que salir -->
+            <% if(grupo.nombre !="General" ){ %>
+                <div id="grupo">
+                    <span>
+                        <h2>
+                            <%= grupo.nombre %>
+                        </h2>
+                    </span>
+                    <form action="/entrarGrupo/<%= grupo.cod %>" method="post">
+                        <button type="submit">Unirme</button>
+                    </form>
+                </div>
+                <%}%>
+                    <% }); %>
+    </div>
+</body>
+
+</html>

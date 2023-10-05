@@ -31,7 +31,7 @@ var crypto = require('crypto');
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 const { log } = require('console');
 var connexio = mysql.createConnection({
-	host: '3.94.130.181',
+	host: '52.91.44.113',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -284,6 +284,26 @@ app.post("/anadirGrupo", (req, res) =>{
 		//console.log("Nombre introducido: " + req.body.nombreGrupo)
 		res.redirect("/")
 	})
+})
+
+
+// Acceder al listado de grupos
+app.get("/listadoGrupos", (req, res)=>{
+	
+	const xsql = 'SELECT * FROM tbgrupo'
+	connexio.query(xsql, (err, results, fields)=>{
+		res.render(path.join(__dirname + '/weblogin/listadoGrupos.ejs'),{results:results})
+	})
+})
+
+app.post("/entrarGrupo/:cod", (req, res)=>{
+	const xsql = 'INSERT INTO tbmiembros VALUES(?,?)'
+
+	connexio.query(xsql, [req.params.cod,req.session.userId],(err,resutls) => {
+		res.redirect('/entrarGrupo/'+req.params.cod);
+	})
+	
+	
 })
 
 // app.post("/grupo/:cod", (req, res) => {
