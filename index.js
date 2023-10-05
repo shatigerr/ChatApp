@@ -31,7 +31,7 @@ var crypto = require('crypto');
 var mysql = require('mysql');				// permet gestionar bases de dades mysql
 const { log } = require('console');
 var connexio = mysql.createConnection({
-	host: '52.91.44.113',
+	host: '184.73.67.68',
 	port:'3306',
 	user: 'dam2',
 	password: 'dam2',
@@ -218,8 +218,13 @@ app.post("/chat/:id",(req, res) => {
 app.get("/grupo/:cod", (req, res) =>{
 	const xsql = 'SELECT * FROM tbmensajes WHERE codgrupo = ? AND codgrupo IS NOT NULL'
 
-	connexio.query(xsql,[req.params.cod], (err, results, fields)=>{
-		//console.log(results);
+	const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
+	// SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id WHERE tbmensajes.codgrupo = "AAAAA";
+
+
+	connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
+		console.log(results);
+		//console.log(results[0].codgrupo) // --> 2
 		res.render(path.join(__dirname + '/weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId})
 	})
 })
@@ -228,7 +233,7 @@ app.post("/grupo/:cod", (req, res)=>{
 	const xsql = 'INSERT INTO tbmensajes (id, emisorId, receptor, mensaje, fecha, codgrupo) VALUES(null,?, null, ?, NOW(), ?)'
 
 	connexio.query(xsql, [req.session.userId, req.body.msg, req.params.cod], (err, results, fields) =>{
-		//console.log(results)
+		// console.log(results)
 		res.redirect("/grupo/" + req.params.cod)
 	})	
 })

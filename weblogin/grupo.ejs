@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Chat</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link rel="stylesheet" href="./css/chatUser.css" type="text/css">
+    <link rel="stylesheet" href="./css/chatGrupo.css" type="text/css">
     <script src="./js/chatUser.js"></script>
 
 </head>
@@ -16,32 +16,46 @@
 <body>
     <header>
         <div id="img-chat">
-           <div id="img-profile"></div>
+            <div id="img-profile"></div>
+            <h3><%= results[0].nombre_grupo %></h3>
         </div>
-
+       
         <div>
-            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/phone.png" alt="phone"/>
-            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/video-message.png" alt="video-message"/>
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/phone.png" alt="phone" />
+            <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/video-message.png"
+                alt="video-message" />
         </div>
     </header>
 
     <div class="messages">
         <% results.forEach(function (msg) { %>
-            <% if (msg.emisorId==id) { %>
+            <% if (msg.id_emisor==id) { %>
                 <div id="emisor-div">
-                    <p id="emisor" class="msg">
-                        <%= msg.mensaje %>
-                    </p>
-                </div>
-                <% } else { %>
-                    <div id="receptor-div">
-                        <p id="receptor" class="msg">
+                    <div class="msg-emisor">
+                        
+                        <p id="mensaje">
                             <%= msg.mensaje %>
                         </p>
                     </div>
+                </div>
+                <% } else { %>
+                    <div id="receptor-div">
+
+                        <div class="msg-receptor">
+                            <h6 id="quienEnvia">
+                                <%= msg.username + ":" %>
+                            </h6>
+                            <p id="mensaje">
+                                <%= msg.mensaje %>
+                            </p>
+                        </div>
+                    </div>
                     <% } %>
+
                         <% }); %>
     </div>
+
+
 
     <footer>
         <form action="/grupo/<%= codgrupo %>" method="post" class="formText">
@@ -60,11 +74,12 @@
 
     <script>
         function scrollDown() {
-        window.scrollTo(0, document.body.scrollHeight);
-        behavior: "smooth";
-    }
+            window.scrollTo(0, document.body.scrollHeight);
+            behavior: "smooth";
+        }
 
-    window.onload = scrollDown;
+        window.onload = scrollDown;
     </script>
 </body>
+
 </html>

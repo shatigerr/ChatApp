@@ -28,22 +28,23 @@
 
     <div class="messages">
         <% results.forEach(function (msg) { %>
-            <% if (msg.emisorId==id) { %>
+            <% if (msg.emisorId == id) { %>
                 <div id="emisor-div">
+                    
                     <p id="emisor" class="msg">
                         <%= msg.mensaje %>
                     </p>
                 </div>
-                <% } else { %>
-                    <div id="receptor-div">
-                        <p id="receptor" class="msg">
-                            <%= msg.mensaje %>
-                        </p>
-                    </div>
-                    <% } %>
-                        <% }); %>
+            <% } else { %>
+                <div id="receptor-div">
+                    <p id="receptor" class="msg">
+                        <%= msg.mensaje %>
+                    </p>
+                </div>
+            <% } %>
+        <% }); %>
     </div>
-
+    
     <footer>
         <form action="/chat/<%= receptor %>" method="post" class="formText">
             <input type="text" name="msg" placeholder="Mensaje" id="inputText" />

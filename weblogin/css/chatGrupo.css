@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat";
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #222831;
+    font-size: 22px;
+  }
+  
+  *::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+    width: 1px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  #img-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: black;
+    background-image: url(../imatges/warning.png);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  .extenderImg {
+    position: absolute;
+    width: 50vw;
+    margin-top: 50vh;
+    margin-right: 50vw;
+  }
+  
+  #img-chat {
+    display: flex;
+    align-items: center;
+  }
+  
+  #img-chat h3 {
+    margin-left: 10px;
+  }
+  
+  header {
+    top: 0;
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 8vh;
+    background-color: rgb(238, 238, 238);
+    border: 1px solid white;
+    padding-left: 10px;
+    padding-right: 20px;
+  }
+  
+  .messages {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 100px;
+  }
+  
+  #emisor-div {
+    display: flex;
+    justify-content: right;
+  }
+  
+  #receptor-div {
+    display: flex;
+    justify-content: left;
+  }
+  
+.msg-emisor{
+    margin: 10px;
+    max-width: 40%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: auto;
+    word-wrap: break-word;
+    background-color: #eeeeee;
+}
+
+  .msg-receptor {
+    margin: 10px;
+    max-width: 40%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: auto;
+    word-wrap: break-word;
+    background-color: #00adb5;
+  }
+
+  .msg-receptor h6{
+    color: white;
+  }
+  
+  #emisor {
+    background-color: #00adb5;
+    color: white;
+  }
+  
+  #receptor {
+    background-color: #eeeeee;
+    color: black;
+  }
+  
+  footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    color: white;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .formText {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #inputText {
+    width: 80vw;
+    padding: 10px;
+    margin-right: 10px;
+  }
+  
+  button {
+    background-image: url(../imatges/icons8-lleno-enviado-30.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid black;
+    background-color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  #toast {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    width: 400px;
+    height: 100px;
+    color: white;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    background-color: rgb(244, 67, 54);
+    font-size: 20px;
+    visibility: hidden;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  #toast div {
+    border-radius: 5px 5px 0px 0px;
+    text-align: center;
+    align-items: center;
+    background-color: rgb(233, 47, 34);
+  }

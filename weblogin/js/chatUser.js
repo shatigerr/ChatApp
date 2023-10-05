@@ -59,9 +59,9 @@ addEventListener("DOMContentLoaded", (e) => {
         
     })
 
-    returnImgChat.addEventListener("click", (e)=>{
-        extendImgChat.classList.remove("extenderImg");
-    })
+    // returnImgChat.addEventListener("click", (e)=>{
+    //     extendImgChat.classList.remove("extenderImg");
+    // })
 
     function scrollDown() {
         window.scrollTo(0, document.body.scrollHeight);
