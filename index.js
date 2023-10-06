@@ -23,6 +23,8 @@ const connexio = require('./db/connDB.js')
 const config = require("./config/config.js")
 const chatController = require("./controllers/chatController.js")
 const app = express();
+const multer = require('multer');
+
 app.use(config);
 
 app.get('/', function (req, res) {

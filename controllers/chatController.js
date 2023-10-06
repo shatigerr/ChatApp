@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const connexio = require('../db/connDB.js')
 const path = require('path');	
+const session = require('express-session');
 let hasdMD5;
 
 class chatController{
@@ -123,8 +124,9 @@ class chatController{
     }
 
     static getGroups(req,res){
-        const xsql = 'SELECT * FROM tbgrupo'
-        connexio.query(xsql, (err, results, fields)=>{
+        const xsql = 'SELECT grp.* FROM tbgrupo AS grp LEFT JOIN tbmiembros ON tbmiembros.groupcod = grp.cod WHERE tbmiembros.userId IS NULL OR tbmiembros.userId != ?;'
+        
+		connexio.query(xsql,[req.session.userId], (err, results, fields)=>{
             res.render(path.join(__dirname + '/../weblogin/listadoGrupos.ejs'),{results:results})
         })
     }
@@ -134,26 +136,24 @@ class chatController{
 
         connexio.query(xsql, [req.params.cod,req.session.userId],(err,resutls) => {
             console.log("Hola");
-            res.redirect('/entrarGrupo/'+req.params.cod);
+            res.redirect('/entrarGrupo/'+ req.params.cod);
         })
         
     }
 
     static postCreateAccount(req,res){
-        const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado) VALUES(null, ?, ?, ? , ?, 0)"
+        const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado, imagenUser) VALUES(null, ?, ?, ? , ?, 0, ?)"
+	    var password = req.body.password
 
-	    password = req.body.password
-
-	    hasdMD5 = crypto.createHash(algorisme).update(password).digest('hex');
+	    hasdMD5 = crypto.createHash('RSA-MD5').update(password).digest('hex');
 
 	    password = hasdMD5;
-
 	    // sesion se guarda en la sesion "cokie"
 	    // params cuando le pasas un valor a la ruta
 	    // body cuando del html o de algun lado le llega la request
 
-	    connexio.query(xsql,[req.body.username, password, req.body.completedUsername, req.body.mail], (err, results, fields)=>{
-		    // console.log(results)
+	    connexio.query(xsql,[req.body.username, password, req.body.completedUsername, req.body.mail, req.body.imagen], (err, results, fields)=>{
+		    console.log(req.body.imagen)
 		    res.redirect("/")
 	    })
     }

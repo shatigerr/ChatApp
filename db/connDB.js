@@ -3,7 +3,7 @@ let connexio;
 
 try{
     connexio = mysql.createConnection({
-        host: '18.232.138.229',
+        host: '54.144.32.145',
         port:'3306',
         user: 'dam2',
         password: 'dam2',
