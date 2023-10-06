@@ -93,7 +93,7 @@ app.get("/entrarGrupo/:cod",(req,res) => {
 })
 
 app.post("/entrarGrupo/:cod", (req, res)=>{
-	chatController.postMemberGroup
+	chatController.postMemberGroup(req,res);
 })
   
 app.get('/chatWait', (req, res) => {
