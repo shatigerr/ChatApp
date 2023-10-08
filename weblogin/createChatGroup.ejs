@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a chat!!</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/createChat.css">
+    <script src="./js/createChatGroup.js"></script>
+    <link rel="shortcut icon" href="./imatges/favicon/chat.png" type="image/x-icon">
+</head>
+
+<body>
+    <div id="container">
+        <nav>
+            <ul>
+                <!-- <li>
+                    <div id="img-profile"></div>
+                </li> -->
+                <li><a href="/grupo/AAAAA" id="grupo-general"><img width="30" height="30"
+                            src="./imatges/icons8-grupo-50.png" alt="groups" /></a></li>
+                <li><a href="/crearGrupo"><img width="30" height="30" src="./imatges/icons8-crear-50.png"
+                            alt="crearGrupo" /></a></a></li>
+                <li>
+                    <form action="/logout" method="post">
+                        <button type="submit"><img width="30" height="30" src="./imatges/icons8-salida-50.png"
+                                alt="logout" /></a></button>
+                    </form>
+                </li>
+                <li><a href="/listadoGrupos"><svg xmlns="http://www.w3.org/2000/svg" color="#606468" width="30"
+                            height="30" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                            <path
+                                d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                            <path
+                                d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                        </svg></a></li>
+            </ul>
+        </nav>
+
+        <div id="personal-and-group">
+            <a href="/home">Chats</a>
+            <a href="/createChatGroup">Grupos</a>
+        </div>
+
+        <section class="users-select">
+            <ul>
+                <% results.forEach(function(grp) { %>
+                    <a href="/grupo/<%= grp.cod %>">
+
+                        <li>
+
+                            <h4>
+                                <%= grp.nombre %>
+                            </h4>
+
+                        </li>
+                    </a>
+                    <% }); %>
+            </ul>
+
+        </section>
+    </div>
+    <iframe id="chat-iframe" src="/chatWait" frameborder="0"></iframe>
+
+</body>
+
+</html>

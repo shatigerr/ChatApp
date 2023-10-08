@@ -14,9 +14,7 @@ class chatController{
 	    hasdMD5 = crypto.createHash(algorisme).update(password).digest('hex');
 	    // 4a7d1ed414474e4033ac29ccb8653d9b
 
-
 	    password = hasdMD5;
-	
 	
 	    var xsql = 'SELECT * FROM tbusuaris WHERE username = ? AND password = ?';		// aquesta sentència sql té vulnerabilitats però no m'ho tingueu en compte xD
 	    let active = 'UPDATE tbusuaris SET conectado=1 WHERE id = ?  '
@@ -73,7 +71,6 @@ class chatController{
 	    const saberNombre = 'SELECT username FROM tbusuaris WHERE id = ?'
 
 	    connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
-	
 		    connexio.query(saberNombre,[req.params.id], (err, results2, fields)=>{
 			    // console.log("------> " + results2[0].username)
 			    //console.log(results);
@@ -84,7 +81,8 @@ class chatController{
 
     static postMessages(req,res){
         const xsql = 'INSERT INTO tbmensajes (id,emisorId,receptor,mensaje,fecha) VALUES(null,?,?,?,NOW())';
-	    connexio.query(xsql,[req.session.userId, req.params.id, req.body.msg], (err,results,fields) =>{
+	    
+		connexio.query(xsql,[req.session.userId, req.params.id, req.body.msg], (err,results,fields) =>{
 		// console.log(results)
 		    res.redirect("/chat/" + req.params.id)
 	    })
@@ -92,13 +90,10 @@ class chatController{
 
     static getGeneralGroupChat(req,res){
         const xsql = 'SELECT * FROM tbmensajes WHERE codgrupo = ? AND codgrupo IS NOT NULL'
-
 	    const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
 	    // SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id WHERE tbmensajes.codgrupo = "AAAAA";
 
 	    connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
-		    console.log(results);
-		    //console.log(results[0].codgrupo) // --> 2
 		    res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId})
 	    })
     }
@@ -115,7 +110,6 @@ class chatController{
     static postNewGroup(req,res){
         const xsql = 'INSERT INTO tbgrupo (cod, nombre) VALUES(?, ?)';
 
-	
         connexio.query(xsql,[req.body.codGrupo, req.body.nombreGrupo], (err, reults, fields)=>{
             //console.log("Codigo introducido: " + req.body.codGrupo)
             //console.log("Nombre introducido: " + req.body.nombreGrupo)
@@ -124,10 +118,9 @@ class chatController{
     }
 
     static getGroups(req,res){
-        const xsql = 'SELECT grp.* FROM tbgrupo AS grp LEFT JOIN tbmiembros ON tbmiembros.groupcod = grp.cod WHERE tbmiembros.userId IS NULL OR tbmiembros.userId != ?;'
-        
+        const xsql = 'SELECT grp.* FROM tbgrupo AS grp WHERE grp.cod NOT IN ( SELECT tbmiembros.groupcod FROM tbmiembros WHERE tbmiembros.userId = ?);'
 		connexio.query(xsql,[req.session.userId], (err, results, fields)=>{
-            res.render(path.join(__dirname + '/../weblogin/listadoGrupos.ejs'),{results:results})
+			res.render(path.join(__dirname + '/../weblogin/listadoGrupos.ejs'),{results:results})
         })
     }
 
@@ -135,8 +128,7 @@ class chatController{
         const xsql = 'INSERT INTO tbmiembros VALUES(?,?)'
 
         connexio.query(xsql, [req.params.cod,req.session.userId],(err,resutls) => {
-            console.log("Hola");
-            res.redirect('/entrarGrupo/'+ req.params.cod);
+            res.redirect('/createChatGroup');
         })
         
     }
@@ -153,10 +145,19 @@ class chatController{
 	    // body cuando del html o de algun lado le llega la request
 
 	    connexio.query(xsql,[req.body.username, password, req.body.completedUsername, req.body.mail, req.body.imagen], (err, results, fields)=>{
-		    console.log(req.body.imagen)
+		    // console.log(req.body.imagen)
 		    res.redirect("/")
 	    })
     }
+
+	static chargeGroups(req, res){
+		const xsql = "SELECT grp.* FROM tbgrupo AS grp INNER JOIN tbmiembros AS mb ON grp.cod = mb.groupcod WHERE mb.userId = ?;"
+
+		connexio.query(xsql,[req.session.userId], (err, results, fields)=>{
+			// console.log(results)
+			res.render(path.join(__dirname + '/../weblogin/createChatGroup.ejs'), {results:results})
+		})
+	}
 }
 
 module.exports = chatController;

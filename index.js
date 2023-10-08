@@ -23,7 +23,6 @@ const connexio = require('./db/connDB.js')
 const config = require("./config/config.js")
 const chatController = require("./controllers/chatController.js")
 const app = express();
-const multer = require('multer');
 
 app.use(config);
 
@@ -102,6 +101,10 @@ app.get('/chatWait', (req, res) => {
 	res.render(path.join(__dirname + '/weblogin/chatWait.ejs'))
   });
   
+app.get('/createChatGroup', (req, res)=>{
+	chatController.chargeGroups(req, res);
+})
+
 app.listen(NPORT, function () {
 	// console.log('***Escoltant pel port ' + NPORT);
 	console.log("http://localhost:" + NPORT)
