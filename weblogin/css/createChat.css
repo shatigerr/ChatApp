@@ -82,6 +82,7 @@ nav button {
 
 #container {
   width: 30%;
+  min-width: 25% ;
   height: auto;
   overflow: auto;
   overflow-y: visible;
@@ -120,6 +121,7 @@ iframe {
 
 #personal-and-group{
   display: flex;
+  flex-wrap: wrap;
   background-color: rgb(17, 27, 33);
   justify-content: center;
 
@@ -145,3 +147,21 @@ iframe {
 #personal-and-group a:nth-child(2){  
   border-left: 2px solid #000;
 }
+
+@media (max-width: 576px) {  
+
+  #personal-and-group a:nth-child(2){  
+    border-top: 2px solid grey;
+    border-left: none; /* Cambia el grosor y el color según tus preferencias */
+    border-right: none;
+    border-bottom: 2px solid white;
+  }
+}
+
+@media (min-width: 768px) {  }
+
+@media (min-width: 992px) {  }
+
+@media (min-width: 1200px) {  }
+
+@media (min-width: 1400px) {  }
