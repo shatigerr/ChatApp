@@ -89,12 +89,15 @@ class chatController{
     }
 
     static getGeneralGroupChat(req,res){
-        const xsql = 'SELECT * FROM tbmensajes WHERE codgrupo = ? AND codgrupo IS NOT NULL'
+        const xsql = 'SELECT * FROM tbgrupo WHERE cod = ?'
 	    const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
 	    // SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id WHERE tbmensajes.codgrupo = "AAAAA";
 
 	    connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
-		    res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId})
+			connexio.query(xsql, [req.params.cod], (err, results2, fields)=>{
+				console.log(results2)
+				res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
+			})    
 	    })
     }
 

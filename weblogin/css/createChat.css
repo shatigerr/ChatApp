@@ -82,7 +82,7 @@ nav button {
 
 #container {
   width: 30%;
-  min-width: 25% ;
+  /* min-width: 25% ; */
   height: auto;
   overflow: auto;
   overflow-y: visible;
@@ -150,13 +150,16 @@ iframe {
 
 @media (max-width: 576px) {  
 
+  iframe{
+    width: 70%;
+  }
   #personal-and-group a:nth-child(2){  
     border-top: 2px solid grey;
     border-left: none; /* Cambia el grosor y el color según tus preferencias */
     border-right: none;
     border-bottom: 2px solid white;
   }
-}
+} 
 
 @media (min-width: 768px) {  }
 

@@ -164,11 +164,22 @@ button {
 
 @media (max-width: 576px) {  
   #call{
-    margin-right: 15px;
+    display: flex;
+    
+    flex-wrap: nowrap;
+  }
+
+  #img-profile{
+    width: 30px;
+    height: 30px;
+  }
+
+  header img{
+    width: 30px;
+    height: 30px;
   }
 
   footer{
-    background-color: red;
     width: 100%;
     justify-content: flex-start;
   }
@@ -187,6 +198,10 @@ button {
 
   #emisor-div{
     margin-right: 30px;
+  }
+
+  header{
+    flex-wrap: nowrap;
   }
 }
 
