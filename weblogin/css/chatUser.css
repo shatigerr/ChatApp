@@ -161,3 +161,39 @@ button {
   align-items: center;
   background-color: rgb(233, 47, 34);
 }
+
+@media (max-width: 576px) {  
+  #call{
+    margin-right: 15px;
+  }
+
+  footer{
+    background-color: red;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  #inputText{
+    width: 80%;
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 12px;
+  }
+
+  #senButton{
+    width: 20%;
+    margin: 0;
+  }
+
+  #emisor-div{
+    margin-right: 30px;
+  }
+}
+
+@media (min-width: 768px) {  }
+
+@media (min-width: 992px) {  }
+
+@media (min-width: 1200px) {  }
+
+@media (min-width: 1400px) {  }
