@@ -95,6 +95,7 @@ class chatController{
 
 	    connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
 			connexio.query(xsql, [req.params.cod], (err, results2, fields)=>{
+				console.log("Codigo = " + req.params.cod)
 				console.log(results2)
 				res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
 			})    

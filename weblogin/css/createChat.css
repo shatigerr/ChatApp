@@ -97,6 +97,7 @@ section {
 
 section ul {
   width: 100%;
+  word-wrap: break-word;
 }
 
 section li {
