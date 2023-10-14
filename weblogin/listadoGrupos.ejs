@@ -18,23 +18,34 @@
             font-family: Montserrat;
         }
 
+        *::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 6px;
+            width: 1px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
         body {
             display: flex;
+            justify-content: center;
             background-color: rgb(44, 51, 56);
         }
 
         #container {
             display: flex;
+            width: 80%;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
-            width: 100vw;
-            height: 100vh;
             text-align: center;
-            flex-direction: column;
-            /* margin-top: 10vh; */
-            /* margin-bottom: 10vh; */
-
+            word-wrap: break-word;
         }
 
         #grupo {
@@ -44,15 +55,16 @@
             border-radius: 5px;
             margin: 10px;
             color: white;
+            word-wrap: break-word;
         }
 
 
         span {
             display: flex;
-
             justify-content: center;
             align-items: center;
             text-align: center;
+            word-wrap: break-word;
         }
 
         span h2 {
@@ -62,6 +74,7 @@
             width: 100vw;
             height: 20vh;
             text-align: center;
+            word-wrap: break-word;
         }
 
         button {
@@ -82,6 +95,12 @@
 
         button:hover {
             background-color: rgb(145, 151, 155);
+        }
+
+        @media (max-width: 576px) {
+            #grupo{
+                min-width: 50vw;
+            }
         }
     </style>
 </head>
