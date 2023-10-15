@@ -46,8 +46,12 @@ class chatController{
         let active = 'UPDATE tbusuaris SET conectado=0 WHERE id = ?  ';
 
         connexio.query(active,[req.session.userId],(err,results) => {
-            req.session.loginOK = false;
-            res.redirect('/');
+			if(err){
+				res.send(err);
+			}else{
+				req.session.loginOK = false;
+				res.redirect('/');
+			}
         })
     }
 
@@ -58,7 +62,12 @@ class chatController{
             
             connexio.query(xsql, [req.session.username], function (err, results, fields){
                 //console.log(results);
-                res.render(path.join(__dirname + '/../weblogin/createChat.ejs'), { user: req.session.nomcomplet,results:results});
+				if(err){
+					res.send(err);
+				}else{
+					res.render(path.join(__dirname + '/../weblogin/createChat.ejs'), { user: req.session.nomcomplet,results:results});
+				}
+                
             })
             
         } else {
@@ -71,10 +80,15 @@ class chatController{
 	    const saberNombre = 'SELECT username FROM tbusuaris WHERE id = ?'
 
 	    connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
-		    connexio.query(saberNombre,[req.params.id], (err, results2, fields)=>{
+		    connexio.query(saberNombre,[req.params.id], (error, results2, fields)=>{
 			    // console.log("------> " + results2[0].username)
 			    //console.log(results);
-			    res.render(path.join(__dirname + '/../weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId, receptorName: results2[0].username})
+				if(error){
+					res.send(error)
+				}else{
+					res.render(path.join(__dirname + '/../weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId, receptorName: results2[0].username})
+				}
+			    
 		    })
 	    })  
     }
@@ -83,21 +97,29 @@ class chatController{
         const xsql = 'INSERT INTO tbmensajes (id,emisorId,receptor,mensaje,fecha) VALUES(null,?,?,?,NOW())';
 	    
 		connexio.query(xsql,[req.session.userId, req.params.id, req.body.msg], (err,results,fields) =>{
-		// console.log(results)
-		    res.redirect("/chat/" + req.params.id)
+			if(err){
+				res.send(err);
+			}else{
+				res.redirect("/chat/" + req.params.id);
+			}
+		    
 	    })
     }
 
     static getGeneralGroupChat(req,res){
         const xsql = 'SELECT * FROM tbgrupo WHERE cod = ?'
 	    const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
-	    // SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id WHERE tbmensajes.codgrupo = "AAAAA";
 
 	    connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
-			connexio.query(xsql, [req.params.cod], (err, results2, fields)=>{
-				console.log("Codigo = " + req.params.cod)
-				console.log(results2)
-				res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
+			if(err)res.send(err);
+			connexio.query(xsql, [req.params.cod], (error, results2, fields)=>{
+				if(error){
+					res.send(error)
+				}else{
+					res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
+				}
+				
+				
 			})    
 	    })
     }
@@ -115,16 +137,24 @@ class chatController{
         const xsql = 'INSERT INTO tbgrupo (cod, nombre) VALUES(?, ?)';
 
         connexio.query(xsql,[req.body.codGrupo, req.body.nombreGrupo], (err, reults, fields)=>{
-            //console.log("Codigo introducido: " + req.body.codGrupo)
-            //console.log("Nombre introducido: " + req.body.nombreGrupo)
-            res.redirect("/")
+            if(err){
+				res.send(err);
+			}else{
+				res.redirect("/home");
+			}
+            
         })
     }
 
     static getGroups(req,res){
         const xsql = 'SELECT grp.* FROM tbgrupo AS grp WHERE grp.cod NOT IN ( SELECT tbmiembros.groupcod FROM tbmiembros WHERE tbmiembros.userId = ?);'
 		connexio.query(xsql,[req.session.userId], (err, results, fields)=>{
-			res.render(path.join(__dirname + '/../weblogin/listadoGrupos.ejs'),{results:results})
+			if(err){
+				res.send(err)
+			}else{
+				res.render(path.join(__dirname + '/../weblogin/listadoGrupos.ejs'),{results:results})
+			}
+			
         })
     }
 
@@ -132,14 +162,18 @@ class chatController{
         const xsql = 'INSERT INTO tbmiembros VALUES(?,?)'
 
         connexio.query(xsql, [req.params.cod,req.session.userId],(err,resutls) => {
-            res.redirect('/createChatGroup');
+            if(err){
+				res.send(err);
+			}else{
+				res.redirect('/createChatGroup');
+			}
         })
         
     }
 
     static postCreateAccount(req,res){
-        const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado, imagenUser) VALUES(null, ?, ?, ? , ?, 0, ?)"
-	    var password = req.body.password
+        const xsql = "INSERT INTO tbusuaris (id, username, password, nomcomplet, email, conectado) VALUES(null, ?, ?, ? , ?, 0)"
+	    let {password,username,completedUsername,mail} = req.body
 
 	    hasdMD5 = crypto.createHash('RSA-MD5').update(password).digest('hex');
 
@@ -147,10 +181,15 @@ class chatController{
 	    // sesion se guarda en la sesion "cokie"
 	    // params cuando le pasas un valor a la ruta
 	    // body cuando del html o de algun lado le llega la request
+		//[req.body.username, password, req.body.completedUsername, req.body.mail]
 
-	    connexio.query(xsql,[req.body.username, password, req.body.completedUsername, req.body.mail, req.body.imagen], (err, results, fields)=>{
-		    // console.log(req.body.imagen)
-		    res.redirect("/")
+	    connexio.query(xsql,[username, password, completedUsername, mail], (err, results, fields)=>{
+		    if(err){
+				res.send('ERROR')
+			}else{
+				res.redirect("/")
+			}
+		    
 	    })
     }
 
