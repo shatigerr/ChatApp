@@ -21,7 +21,8 @@ const crypto = require('crypto');
 const path = require('path');					// permet treballar amb les rutes de fitxers i directoris
 const connexio = require('./db/connDB.js')
 const config = require("./config/config.js")
-const chatController = require("./controllers/chatController.js")
+const chatController = require("./controllers/chatController.js");
+const session = require('express-session');
 const app = express();
 
 app.use(config);
@@ -76,17 +77,32 @@ app.post('/logout',(req,res) => {
 
 // Crear grupo
 app.get("/crearGrupo", (req, res)=>{
-	res.render(path.join(__dirname + '/weblogin/crearGrupo.ejs'))
+	if(req.session.loginOK){
+		res.render(path.join(__dirname + '/weblogin/crearGrupo.ejs'))
+	}else{
+		res.redirect("/");
+	}
+	
 })
 
 app.post("/anadirGrupo", (req, res) =>{
-	chatController.postNewGroup(req,res);
+	if(req.session.loginOK){
+		chatController.postNewGroup(req,res);
+	}else{
+		res.redirect("/")
+	}
+	
 })
 
 
 // Acceder al listado de grupos
 app.get("/listadoGrupos", (req, res)=>{
-	chatController.getGroups(req,res);
+	if(req.session.loginOK){
+		chatController.getGroups(req,res);
+	}else{
+		res.redirect("/")
+	}
+	
 })
 
 app.get("/entrarGrupo/:cod",(req,res) => {
@@ -94,15 +110,29 @@ app.get("/entrarGrupo/:cod",(req,res) => {
 })
 
 app.post("/entrarGrupo/:cod", (req, res)=>{
-	chatController.postMemberGroup(req,res);
+	if(req.session.loginOK){
+		chatController.postMemberGroup(req,res);
+	}else{
+		res.redirect("/")
+	}
+	
 })
   
 app.get('/chatWait', (req, res) => {
-	res.render(path.join(__dirname + '/weblogin/chatWait.ejs'))
+	if(req.session.loginOK){
+		res.render(path.join(__dirname + '/weblogin/chatWait.ejs'))	
+	}else{
+		res.redirect("/")
+	}
+	
   });
   
 app.get('/createChatGroup', (req, res)=>{
-	chatController.chargeGroups(req, res);
+	if(req.session.loginOK){
+		chatController.chargeGroups(req, res);
+	}else{
+		res.redirect("/")
+	}
 })
 
 app.listen(NPORT, function () {

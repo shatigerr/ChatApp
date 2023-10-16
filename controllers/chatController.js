@@ -43,7 +43,7 @@ class chatController{
     }
 
     static logout(req,res){
-        let active = 'UPDATE tbusuaris SET conectado=0 WHERE id = ?  ';
+        const active = 'UPDATE tbusuaris SET conectado=0 WHERE id = ?  ';
 
         connexio.query(active,[req.session.userId],(err,results) => {
 			if(err){
@@ -76,21 +76,26 @@ class chatController{
     }
 
     static getChatById(req,res){
-        const xsql = 'SELECT * FROM tbmensajes WHERE (emisorId = ? OR receptor = ?) AND (emisorId = ? OR receptor = ?) ';
-	    const saberNombre = 'SELECT username FROM tbusuaris WHERE id = ?'
+        
+		if(req.session.loginOK){
 
-	    connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
-		    connexio.query(saberNombre,[req.params.id], (error, results2, fields)=>{
-			    // console.log("------> " + results2[0].username)
-			    //console.log(results);
-				if(error){
-					res.send(error)
-				}else{
-					res.render(path.join(__dirname + '/../weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId, receptorName: results2[0].username})
-				}
-			    
-		    })
-	    })  
+			const xsql = 'SELECT * FROM tbmensajes WHERE (emisorId = ? OR receptor = ?) AND (emisorId = ? OR receptor = ?) ';
+			const saberNombre = 'SELECT username FROM tbusuaris WHERE id = ?'
+	
+			connexio.query(xsql,[req.session.userId, req.session.userId, req.params.id, req.params.id], (err,results,fields) => {
+	
+				connexio.query(saberNombre,[req.params.id], (error, results2, fields)=>{
+					if(error){
+						res.send(error)
+					}else{
+						res.render(path.join(__dirname + '/../weblogin/chatUser.ejs'),{receptor:req.params.id,results:results, id:req.session.userId, receptorName: results2[0].username})
+					}
+					
+				})
+			})  
+		}else{
+			res.redirect("/");
+		}
     }
 
     static postMessages(req,res){
@@ -107,21 +112,27 @@ class chatController{
     }
 
     static getGeneralGroupChat(req,res){
-        const xsql = 'SELECT * FROM tbgrupo WHERE cod = ?'
-	    const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
 
-	    connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
-			if(err)res.send(err);
-			connexio.query(xsql, [req.params.cod], (error, results2, fields)=>{
-				if(error){
-					res.send(error)
-				}else{
-					res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
-				}
-				
-				
-			})    
-	    })
+		if(req.session.loginOK){
+			const xsql = 'SELECT * FROM tbgrupo WHERE cod = ?'
+			const innerJoin = "SELECT tbmensajes.emisorId AS id_emisor, tbusuaris.username, tbmensajes.mensaje, tbgrupo.nombre AS nombre_grupo FROM tbmensajes INNER JOIN tbusuaris ON tbmensajes.emisorId = tbusuaris.id INNER JOIN tbgrupo ON tbmensajes.codgrupo = tbgrupo.cod WHERE tbmensajes.codgrupo = ?;";
+
+			connexio.query(innerJoin,[req.params.cod], (err, results, fields)=>{
+				if(err)res.send(err);
+				connexio.query(xsql, [req.params.cod], (error, results2, fields)=>{
+					if(error){
+						res.send(error)
+					}else{
+						res.render(path.join(__dirname + '/../weblogin/grupo.ejs'), {results:results, codgrupo:req.params.cod, id:req.session.userId, results2:results2})
+					}
+					
+					
+				})    
+			})
+		}else{
+			res.redirect("/");
+		}
+        
     }
 
     static postGroupMessage(req,res){
