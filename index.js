@@ -127,7 +127,7 @@ app.get('/chatWait', (req, res) => {
 	
   });
   
-app.get('/createChatGroup', (req, res)=>{
+app.get('/createChatGroup', (req, res)=>{		
 	if(req.session.loginOK){
 		chatController.chargeGroups(req, res);
 	}else{
